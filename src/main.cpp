@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h> //https://github.com/esp8266/Arduino
+#include <ESP8266Ping.h>
 
 //needed for library
 
@@ -12,10 +13,12 @@ const char *password = "82447410";
 const char *mqtt_server = "192.168.0.3";
 const char *listentopic = "/halli/light";
 const char *statustopic = "/halli/lightstatus";
+const IPAddress remote_ip(192, 168, 1, 201);   //mqtt server(docker) ip
 long current_time;
 long looptime;
 int inputint;
 char msg[50];
+long lastMsg;
 
 //flag for saving data
 
@@ -106,4 +109,15 @@ void loop()
 
   client.loop();
   current_time = millis();
+    if (millis() - lastMsg > 5000)
+  {
+    lastMsg = millis();
+      if(Ping.ping(remote_ip,1)) {
+    Serial.println("Success!!");
+  } else {
+    Serial.println("Error :(");
+     ESP.restart();
+  }
+
+  }
 }

@@ -18,7 +18,7 @@ long current_time;
 long looptime;
 int inputint;
 char msg[50];
-long lastMsg;
+long lastMsg=0;
 
 //flag for saving data
 

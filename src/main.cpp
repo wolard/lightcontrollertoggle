@@ -8,9 +8,9 @@
 
 #include <PubSubClient.h>
 //define your default values here, if there are different values in config.json, they are overwritten.
-const char *ssid = "TP-LINK_BF33";
-const char *password = "82447410";
-const char *mqtt_server = "192.168.0.3";
+const char *ssid = "ZyXEL";
+const char *password = "kopo2008";
+const char *mqtt_server = "192.168.1.201";
 const char *listentopic = "/halli/light";
 const char *statustopic = "/halli/lightstatus";
 const IPAddress remote_ip(192, 168, 1, 201);   //mqtt server(docker) ip
@@ -59,9 +59,9 @@ void callback(char *topic, byte *payload, int length)
   if ((char)payload[0] == '1')
   {
 
-    digitalWrite(D2, HIGH); // Turn the LED on (Note that LOW is the voltage level
+    digitalWrite(D2, LOW); // Turn the LED on (Note that LOW is the voltage level
     delay(100);             // but actually the LED is on; this is because
-    digitalWrite(D2, LOW);  // it is active low on the ESP-01)
+    digitalWrite(D2, HIGH);  // it is active low on the ESP-01)
     delay(50);
     inputint = digitalRead(D1);
 
@@ -94,6 +94,7 @@ void setup()
   Serial.println(WiFi.localIP());
   pinMode(D1, INPUT);
   pinMode(D2, OUTPUT);
+  digitalWrite(D2,HIGH);
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
   current_time = millis();

@@ -14,7 +14,8 @@ const char *mqtt_server = "192.168.1.201";
 const char *listentopic = "/halli/light";
 const char *statustopic = "/halli/lightstatus";
 const IPAddress remote_ip(192, 168, 1, 201);   //mqtt server(docker) ip
-long current_time;
+
+long statusupdate=0;
 long looptime;
 int inputint;
 char msg[50];
@@ -62,12 +63,13 @@ void callback(char *topic, byte *payload, int length)
     digitalWrite(D2, LOW); // Turn the LED on (Note that LOW is the voltage level
     delay(100);             // but actually the LED is on; this is because
     digitalWrite(D2, HIGH);  // it is active low on the ESP-01)
-    delay(50);
+    delay(300);
     inputint = digitalRead(D1);
 
     client.publish("/halli/lightstatus", String(inputint).c_str());
   }
 }
+
 boolean reconnect()
 {
   String clientId = "ESP8266Client-";
@@ -97,7 +99,7 @@ void setup()
   digitalWrite(D2,HIGH);
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-  current_time = millis();
+
 }
 
 void loop()
@@ -109,7 +111,8 @@ void loop()
   }
 
   client.loop();
-  current_time = millis();
+
+  
     if (millis() - lastMsg > 5000)
   {
     lastMsg = millis();
@@ -119,6 +122,14 @@ void loop()
     Serial.println("Error :(");
      ESP.restart();
   }
+
+  }
+   if (millis() - statusupdate > 1000)
+  {
+ statusupdate=millis();
+    inputint = digitalRead(D1);
+
+    client.publish("/halli/lightstatus", String(inputint).c_str());
 
   }
 }

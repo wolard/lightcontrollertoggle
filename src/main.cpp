@@ -8,11 +8,11 @@
 
 #include <PubSubClient.h>
 //define your default values here, if there are different values in config.json, they are overwritten.
-const char *ssid = "ZyXEL";
+const char *ssid = "koti";
 const char *password = "kopo2008";
 const char *mqtt_server = "192.168.1.201";
-const char *listentopic = "/halli/light";
-const char *statustopic = "/halli/lightstatus";
+const char *listentopic = "/home/heater";
+const char *statustopic = "/home/heaterstatus";
 const IPAddress remote_ip(192, 168, 1, 201);   //mqtt server(docker) ip
 
 long statusupdate=0;
